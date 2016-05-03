@@ -1,15 +1,14 @@
 function printLcd(inputs) {
 
     var numberArry = buildNumberArry(inputs);
-    var numberString = matchNumberString(numberArry);
-    printNumber(numberString);
-
+    var lcd = buildLcd();
+    var numberValue = matchNumberString(numberArry, lcd);
+    var numberString = buildNumberString(numberValue, numberArry);
 }
 
 function buildNumberArry(numbers) {
 
     var numberArry = [];
-
 
     for (var i = 0; i < numbers.length; i++)
         numberArry.push(numbers[i]);
@@ -17,44 +16,45 @@ function buildNumberArry(numbers) {
     return numberArry;
 }
 
-function findNumber(number) {
-    for (var i = 0; i < 10; i++) {
-        if (number === i + "") {
+function findNumber(number, lcd) {
+    for (var i = 0; i < lcd.length; i++) {
+        if (number === lcd[i].key) {
 
-            return i;
+            return lcd[i].value;
         }
     }
 }
 
-function buildlcd() {
+function matchNumberString(numberArry, lcd) {
 
-    var lcd = [];
-
-    lcd = [
-        ["._. ", "... ", "._. ", "._. ", "... ", "._. ", "._. ", "._. ", "._. ", "._. "],
-        ["|.| ", "..| ", "._| ", "._| ", "|_| ", "|_. ", "|_. ", "..| ", "|_| ", "|_| "],
-        ["|_| ", "..| ", "|_. ", "._| ", "..| ", "._| ", "|_| ", "..| ", "|_| ", "..| "]
-    ];
-
-    return lcd;
-}
-
-function matchNumberString(numberArry) {
-
-    var lcd = buildlcd();
-    var numberString = "";
-    var indexArry = [];
+    var numberValue = [];
 
     numberArry.forEach(function (number) {
 
-        var index = findNumber(number);
+        var value = findNumber(number, lcd);
 
-        indexArry.push(index);
+        numberValue.push(value);
     });
-    for (var i = 0; i < numberArry.length; i++) {
-        numberString += lcd[i][indexArry[0]] + lcd[i][indexArry[1]] + lcd[i][indexArry[2]] + "\n";
-    };
 
-    return numberString;
+    return numberValue;
 }
+
+function buildNumberString(numberValue, numberArry) {
+
+    var Enter = 0;
+    var string = "";
+
+    for (var i = 0; i < 3; i++) {
+        for (var row = 0; row < numberArry.length; row++) {
+            string += numberValue[row][i];
+        }
+        Enter++;
+        if (Enter < 3) {
+            string += "\n";
+        }
+    }
+
+    return string;
+}
+
 
